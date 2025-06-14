@@ -1,0 +1,8 @@
+streamlit
+pandas
+sqlite3
+PyJWT
+chromadb
+sentence-transformers
+numpy
+pathlib
