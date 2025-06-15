@@ -8,9 +8,11 @@ from langchain_core.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 from langchain_community.document_loaders import DirectoryLoader
 import re
-
-
-
+import streamlit as st
+import os
+import json
+from datetime import datetime
+import hashlib
 
 
 load_dotenv()  # take environment variables
@@ -68,7 +70,7 @@ def create_and_store_vs(updated_docs):
 def answer(question, input_department):
     # Step 1: Use retriever with the actual question
     vector_store = FAISS.load_local("faiss_index", embeddings, allow_dangerous_deserialization=True)
-    retriever = vector_store.as_retriever(search_type="mmr", search_kwargs={"k": 5})
+    retriever = vector_store.as_retriever(search_type="mmr", search_kwargs={"k": 7})
     results = retriever.invoke(question)
 
     # Step 2: Enhanced filtering to handle both string and list departments
@@ -135,3 +137,233 @@ def answer(question, input_department):
     
     return response, context
 
+
+
+class SessionManager:
+    """Manage user sessions and chat history"""
+    
+    @staticmethod
+    def save_chat_session(username, department, chat_history):
+        """Save chat session to file"""
+        session_dir = "chat_sessions"
+        os.makedirs(session_dir, exist_ok=True)
+        
+        session_file = f"{session_dir}/{username}_{department}_{datetime.now().strftime('%Y%m%d')}.json"
+        
+        session_data = {
+            "username": username,
+            "department": department,
+            "timestamp": datetime.now().isoformat(),
+            "chat_history": chat_history
+        }
+        
+        with open(session_file, 'w') as f:
+            json.dump(session_data, f, indent=2)
+    
+    @staticmethod
+    def load_chat_session(username, department):
+        """Load previous chat session"""
+        session_dir = "chat_sessions"
+        session_file = f"{session_dir}/{username}_{department}_{datetime.now().strftime('%Y%m%d')}.json"
+        
+        if os.path.exists(session_file):
+            with open(session_file, 'r') as f:
+                session_data = json.load(f)
+                return session_data.get('chat_history', [])
+        
+        return []
+
+class DatabaseManager:
+    """Enhanced database operations"""
+    
+    def __init__(self, db_file="enhanced_users.json"):
+        self.db_file = db_file
+        self.users = self.load_users()
+    
+    def load_users(self):
+        if os.path.exists(self.db_file):
+            with open(self.db_file, 'r') as f:
+                return json.load(f)
+        return {}
+    
+    def save_users(self):
+        with open(self.db_file, 'w') as f:
+            json.dump(self.users, f, indent=2)
+    
+    def hash_password(self, password):
+        return hashlib.sha256(password.encode()).hexdigest()
+    
+    def create_user(self, username, email, password, full_name, department_preferences=None):
+        """Create a new user with enhanced profile"""
+        if username in self.users:
+            return False, "Username already exists"
+        
+        if any(user.get('email') == email for user in self.users.values()):
+            return False, "Email already registered"
+        
+        self.users[username] = {
+            'email': email,
+            'password': self.hash_password(password),
+            'full_name': full_name,
+            'department_preferences': department_preferences or [],
+            'created_at': datetime.now().isoformat(),
+            'last_login': None,
+            'login_count': 0,
+            'chat_sessions': [],
+            'profile_settings': {
+                'theme': 'default',
+                'notifications': True,
+                'auto_save_chats': True
+            }
+        }
+        self.save_users()
+        return True, "Registration successful"
+    
+    def authenticate_user(self, username, password):
+        """Authenticate user and update login stats"""
+        if username not in self.users:
+            return False, "User not found"
+        
+        if self.users[username]['password'] != self.hash_password(password):
+            return False, "Invalid password"
+        
+        # Update login stats
+        self.users[username]['last_login'] = datetime.now().isoformat()
+        self.users[username]['login_count'] = self.users[username].get('login_count', 0) + 1
+        self.save_users()
+        return True, "Login successful"
+    
+    def update_user_preferences(self, username, preferences):
+        """Update user preferences"""
+        if username in self.users:
+            self.users[username]['profile_settings'].update(preferences)
+            self.save_users()
+            return True
+        return False
+    
+    def log_chat_session(self, username, department, message_count):
+        """Log chat session for analytics"""
+        if username in self.users:
+            session_log = {
+                'department': department,
+                'timestamp': datetime.now().isoformat(),
+                'message_count': message_count
+            }
+            
+            if 'chat_sessions' not in self.users[username]:
+                self.users[username]['chat_sessions'] = []
+            
+            self.users[username]['chat_sessions'].append(session_log)
+            self.save_users()
+
+class AnalyticsManager:
+    """Analytics and reporting for the chatbot"""
+    
+    @staticmethod
+    def get_user_stats(username, users_db):
+        """Get user statistics"""
+        if username not in users_db:
+            return {}
+        
+        user_data = users_db[username]
+        chat_sessions = user_data.get('chat_sessions', [])
+        
+        stats = {
+            'total_sessions': len(chat_sessions),
+            'total_messages': sum(session.get('message_count', 0) for session in chat_sessions),
+            'favorite_department': None,
+            'last_active': user_data.get('last_login'),
+            'member_since': user_data.get('created_at')
+        }
+        
+        # Find favorite department
+        if chat_sessions:
+            dept_counts = {}
+            for session in chat_sessions:
+                dept = session.get('department', 'unknown')
+                dept_counts[dept] = dept_counts.get(dept, 0) + 1
+            
+            stats['favorite_department'] = max(dept_counts, key=dept_counts.get)
+        
+        return stats
+    
+    @staticmethod
+    def get_department_stats(department, users_db):
+        """Get department usage statistics"""
+        total_sessions = 0
+        total_messages = 0
+        unique_users = set()
+        
+        for username, user_data in users_db.items():
+            chat_sessions = user_data.get('chat_sessions', [])
+            for session in chat_sessions:
+                if session.get('department') == department:
+                    total_sessions += 1
+                    total_messages += session.get('message_count', 0)
+                    unique_users.add(username)
+        
+        return {
+            'total_sessions': total_sessions,
+            'total_messages': total_messages,
+            'unique_users': len(unique_users)
+        }
+
+def validate_email(email):
+    """Simple email validation"""
+    import re
+    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return re.match(pattern, email) is not None
+
+def validate_password(password):
+    """Password validation with requirements"""
+    if len(password) < 8:
+        return False, "Password must be at least 8 characters long"
+    
+    if not any(c.isupper() for c in password):
+        return False, "Password must contain at least one uppercase letter"
+    
+    if not any(c.islower() for c in password):
+        return False, "Password must contain at least one lowercase letter"
+    
+    if not any(c.isdigit() for c in password):
+        return False, "Password must contain at least one number"
+    
+    return True, "Password is valid"
+
+def format_timestamp(timestamp_str):
+    """Format timestamp for display"""
+    try:
+        dt = datetime.fromisoformat(timestamp_str)
+        return dt.strftime("%B %d, %Y at %I:%M %p")
+    except:
+        return "Unknown"
+
+def export_chat_history(chat_history, username, department):
+    """Export chat history to JSON format"""
+    export_data = {
+        "user": username,
+        "department": department,
+        "export_date": datetime.now().isoformat(),
+        "chat_history": chat_history
+    }
+    
+    return json.dumps(export_data, indent=2)
+
+# Streamlit utility functions
+def show_success_message(message, duration=3):
+    """Show success message with auto-hide"""
+    success_placeholder = st.empty()
+    success_placeholder.success(message)
+    
+def show_error_message(message, duration=3):
+    """Show error message with auto-hide"""
+    error_placeholder = st.empty()
+    error_placeholder.error(message)
+
+def create_download_link(data, filename, link_text):
+    """Create download link for data"""
+    import base64
+    
+    b64 = base64.b64encode(data.encode()).decode()
+    href = f'<a href="data:application/json;base64,{b64}" download="{filename}">{link_text}</a>'
+    return href
