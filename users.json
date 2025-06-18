@@ -1,9 +1,10 @@
 {
-  "pratham": {
-    "email": "pratham@gmail.com",
-    "password": "9b8769a4a742959a2d0298c36fb70623f2dfacda8436237df08d8dfd5b37374c",
-    "full_name": "Prathamesh",
-    "created_at": "2025-06-15T13:26:18.097766",
-    "last_login": "2025-06-15T14:14:53.095115"
+  "string": {
+    "email": "user@example.com",
+    "department": "marketing",
+    "password": "473287f8298dba7163a897908958f7c0eae733e25d2e027992ea2edc9bed2fa8",
+    "full_name": "string",
+    "created_at": "2025-06-19T00:36:10.392580",
+    "last_login": "2025-06-19T00:42:40.133322"
   }
 }

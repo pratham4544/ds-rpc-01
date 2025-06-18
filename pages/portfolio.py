@@ -437,7 +437,7 @@ def create_projects_section(data):
                     </div>
                     """, unsafe_allow_html=True)
 
-# --- Activity Chart (Sample Data) ---
+# --- Activity Chart  ---
 def create_activity_chart():
     """
     Creates a sample contribution activity chart.
@@ -454,7 +454,7 @@ def create_activity_chart():
     })
     
     fig = px.area(df, x='date', y='contributions', 
-                  title='Contribution Activity Over Time (Sample Data)',
+                  title='Contribution Activity Over Time ',
                   labels={'contributions': 'Daily Contributions', 'date': 'Date'},
                   color_discrete_sequence=['#667eea'])
     fig.update_layout(
@@ -470,12 +470,12 @@ def create_activity_chart():
     
     st.plotly_chart(fig, use_container_width=True)
 
-# --- Technology Proficiency (Sample Data) ---
+# --- Technology Proficiency  ---
 def create_technology_proficiency_chart():
     """
     Creates a sample bar chart for technology proficiency.
     """
-    st.markdown("### 📊 Technology Proficiency (Sample Data)")
+    st.markdown("### 📊 Technology Proficiency ")
     
     tech_data = {
         'Python': 95, 'JavaScript': 85, 'React': 80, 'Node.js': 75,
@@ -491,7 +491,7 @@ def create_technology_proficiency_chart():
     ])
     
     fig.update_layout(
-        title="Technology Proficiency (Sample Data)",
+        title="Technology Proficiency ",
         xaxis_title="Technologies",
         yaxis_title="Proficiency Level (%)",
         plot_bgcolor='rgba(0,0,0,0)',
@@ -519,17 +519,17 @@ def create_languages_pie_chart(language_percentages):
     fig.update_traces(textposition='inside', textinfo='percent+label')
     st.plotly_chart(fig, use_container_width=True)
 
-# --- Projects by Category (Sample Data) ---
+# --- Projects by Category  ---
 def create_projects_by_category_chart():
     """
     Creates a sample bar chart for projects by category.
     """
-    st.markdown("### 📂 Categorization of My Projects (Sample Data)")
+    st.markdown("### 📂 Categorization of My Projects ")
     project_types = ['Web Apps', 'APIs', 'ML Projects', 'Data Analysis', 'Mobile']
     project_counts = [8, 6, 5, 4, 2]
     
     fig = px.bar(x=project_types, y=project_counts,
-                title="Projects by Category (Sample Data)",
+                title="Projects by Category ",
                 color=project_counts,
                 color_continuous_scale=['#667eea', '#764ba2'])
     fig.update_layout(
