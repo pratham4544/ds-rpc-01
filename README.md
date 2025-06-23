@@ -6,7 +6,7 @@ Welcome to **ChatBot Pro** – an interactive, role-based internal chatbot built
 
 ## 🚀 Live Demo
 
-👉 **[Try ChatBot Pro Now!]([https://your-deployment-url-here](https://role-base-chatbot-codebasics.streamlit.app/))**  
+👉 **[Try ChatBot Pro Now!]([https://your-deployment-url-here](https://role-base-chatbot-codebasics.streamlit.app/)**  
 
 
 ---
