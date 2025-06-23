@@ -12,6 +12,16 @@ st.set_page_config(
     layout="wide"
 )
 
+def get_sample_questions():
+    """Return a sample question for each department based on available resources."""
+    return [
+        {"name": "Engineering", "question": "What is the main technology stack used in our backend services?"},
+        {"name": "Finance", "question": "Can you summarize the latest quarterly financial report?"},
+        {"name": "HR", "question": "What are the key benefits provided to employees?"},
+        {"name": "Marketing", "question": "Show me the highlights from the Q4 2024 marketing report."},
+        {"name": "General", "question": "How do I apply for maternity leave?"}
+    ]
+
 def main():
     # Check authentication
     check_auth()
@@ -24,17 +34,14 @@ def main():
     # Load user info
     users = load_users()
     user_info = users.get(username, {})
-    
-    # Sidebar with user info and options
+
+    # --- Move Sample Questions to Top of Sidebar ---
     with st.sidebar:
-        st.subheader("User Information")
-        st.write(f"Name: {user_info.get('full_name', 'N/A')}")
-        st.write(f"Username: {username}")
-        st.write(f"Email: {user_info.get('email', 'N/A')}")
-        
-        st.subheader("Current Department")
-        st.write(dept_config['name'])
-        
+        st.subheader("Sample Questions")
+        for sample in get_sample_questions():
+            st.markdown(f"**{sample['name']}**: {sample['question']}")
+        st.markdown("---")
+
         if st.button("Logout"):
             st.session_state.authenticated = False
             st.session_state.username = None
@@ -48,7 +55,7 @@ def main():
         if st.button("Clear Chat History"):
             st.session_state.chat_history = []
             st.rerun()
-    
+
     # Main content area
     show_department_header(dept_config)
     

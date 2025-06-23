@@ -297,48 +297,21 @@ portfolio_data = get_processed_portfolio_data(user_data, repos_data)
 # --- Header Section ---
 def create_header(data):
     """Creates the header section with profile pic, name, title, and social links."""
-    # Create header using Streamlit components instead of HTML
-    
-    # Create columns for centering
-    col1, col2, col3 = st.columns([1, 2, 1])
-    
-    with col2:
-        # Profile picture
-        if data['profile_pic_url'] and data['profile_pic_url'] != 'https://placehold.co/150x150/cbd5e1/4b5563?text=P':
-            st.image(data['profile_pic_url'], width=150)
-        else:
-            st.markdown("""
-            <div style="width: 150px; height: 150px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                        display: flex; align-items: center; justify-content: center; margin: 0 auto; color: white; font-size: 60px; font-weight: bold;">
-                P
+    # Center everything using a single column and HTML/CSS
+    st.markdown(f"""
+    <div class="header-container">
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+            <img src="{data['profile_pic_url']}" alt="Profile Picture" class="profile-pic" style="margin-bottom: 1.5rem;" />
+            <div class="header-title">{data['name']}</div>
+            <div class="header-subtitle">{data['title']}</div>
+            <div class="social-links">
+                <a href="{data['github']}" class="social-link" target="_blank">🔗 GitHub</a>
+                <a href="{data['linkedin']}" class="social-link" target="_blank">💼 LinkedIn</a>
+                <a href="mailto:{data['email']}" class="social-link" target="_blank">📧 Email</a>
             </div>
-            """, unsafe_allow_html=True)
-        
-        # Name and title
-        st.markdown(f"""
-        <div style="text-align: center; margin: 2rem 0;">
-            <h1 style="font-size: 3rem; margin-bottom: 0.5rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
-                       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
-                {data['name']}
-            </h1>
-            <p style="font-size: 1.3rem; color: #666; margin-bottom: 1rem;">
-                {data['title']}
-            </p>
         </div>
-        """, unsafe_allow_html=True)
-        
-        # Social links using columns
-        link_col1, link_col2, link_col3 = st.columns(3)
-        
-        with link_col1:
-            st.markdown(f"[🔗 GitHub]({data['github']})")
-        
-        with link_col2:
-            st.markdown(f"[💼 LinkedIn]({data['linkedin']})")
-        
-        with link_col3:
-            st.markdown(f"[📧 Email](mailto:{data['email']})")
-    
+    </div>
+    """, unsafe_allow_html=True)
     st.markdown("---")
 
 # --- About Me Section ---
@@ -577,6 +550,46 @@ def create_contact_section(data):
                 else:
                     st.error("Please fill in all fields.")
 
+# --- Favourite Projects Section ---
+def create_favourite_projects_section():
+    """Creates a section to showcase personal favourite projects with links."""
+    st.markdown("## 🌟 My Favourite Projects")
+
+    # List your favourite projects here
+    favourite_projects = [
+        {
+            "name": "ChatBot Pro",
+            "description": "A role-based internal chatbot for organizations, built with Streamlit and FastAPI.",
+            "github_url": "https://github.com/pratham4544/ds-rpc-01",
+            "demo_url": "https://your-deployment-url-here"  # Replace with your live demo URL
+        },
+        {
+            "name": "Awesome Portfolio",
+            "description": "A modern, interactive developer portfolio template using Streamlit.",
+            "github_url": "https://github.com/pratham4544/awesome-portfolio",
+            "demo_url": "https://portfolio-demo-url-here"  # Replace with your live demo URL
+        },
+        # Add more favourite projects as needed
+    ]
+
+    for project in favourite_projects:
+        st.markdown(f"""
+        <div class="project-card">
+            <h3 style="color: #2c3e50; margin-bottom: 0.75rem;">{project['name']}</h3>
+            <p style="color: #666; margin-bottom: 1rem; line-height: 1.6; font-size: 0.95rem;">
+                {project['description']}
+            </p>
+            <div>
+                <a href="{project['github_url']}" class="custom-button" target="_blank" style="margin-right: 0.5rem;">
+                    🔗 View Code
+                </a>
+                <a href="{project['demo_url']}" class="custom-button" target="_blank">
+                    🚀 Live Demo
+                </a>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
 # --- Main Application Logic ---
 def main():
     
@@ -584,27 +597,28 @@ def main():
     create_header(portfolio_data)
     
     # Navigation tabs
-    tab1, tab2, tab3, tab4, tab5 = st.tabs(["👨‍💻 About", "📊 Statistics", "🚀 Projects", "📈 Analytics", "📬 Contact"])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs([
+        "👨‍💻 About", 
+        "🌟 Favourites",   # Favourites tab moved to second position
+        "🚀 Projects", 
+        "📈 Analytics", 
+        "📬 Contact"
+    ])
     
     with tab1:
         create_about_section(portfolio_data)
     
     with tab2:
-        create_stats_section(portfolio_data)
-        st.markdown("---")
-        create_technology_proficiency_chart() 
+        create_favourite_projects_section()  # Show favourite projects here
     
     with tab3:
         create_projects_section(portfolio_data)
     
     with tab4:
         create_activity_chart()
-        
         col1, col2 = st.columns(2)
-        
         with col1:
             create_languages_pie_chart(portfolio_data['language_percentages'])
-        
         with col2:
             create_projects_by_category_chart()
     

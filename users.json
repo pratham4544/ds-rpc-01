@@ -6,5 +6,61 @@
     "full_name": "string",
     "created_at": "2025-06-19T00:36:10.392580",
     "last_login": "2025-06-19T00:42:40.133322"
+  },
+  "pratha": {
+    "email": "p@gmail.com",
+    "department": "hr",
+    "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+    "full_name": "prathamesh",
+    "created_at": "2025-06-21T14:24:48.411982",
+    "last_login": null
+  },
+  "123456": {
+    "email": "p2@gmail.com",
+    "department": "hr",
+    "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+    "full_name": "prathamesh",
+    "created_at": "2025-06-21T14:26:35.064049",
+    "last_login": "2025-06-21T14:38:36.559773"
+  },
+  "HR": {
+    "email": "hr@gmail.com",
+    "department": "hr",
+    "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+    "full_name": "HR Role",
+    "created_at": "2025-06-21T16:06:20.079034",
+    "last_login": "2025-06-21T16:11:38.566007"
+  },
+  "finance": {
+    "email": "finance@gmail.com",
+    "department": "finance",
+    "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+    "full_name": "Finance Role",
+    "created_at": "2025-06-21T16:06:53.219777",
+    "last_login": "2025-06-21T16:13:24.698580"
+  },
+  "marketin": {
+    "email": "marketing@gmail.com",
+    "department": "marketing",
+    "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+    "full_name": "Marketing Role",
+    "created_at": "2025-06-21T16:07:21.329998",
+    "last_login": null
+  },
+  "engineering": {
+    "email": "engineering@gmail.com",
+    "department": "engineering",
+    "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+    "full_name": "Engineering Role",
+    "created_at": "2025-06-21T16:07:48.528122",
+    "last_login": "2025-06-21T16:15:35.856280"
+  },
+  "c_level": {
+    "email": "c_level@gmail.com",
+    "department": "c_level",
+    "password": "8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92",
+    "full_name": "C_Level Role",
+    "created_at": "2025-06-23T22:02:59.277858",
+    "last_login": "2025-06-23T22:52:56.787548"
   }
 }

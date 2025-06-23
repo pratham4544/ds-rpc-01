@@ -38,8 +38,8 @@ def load_data_path(path = '../resources/data'):
 
 
 def update_metadata_into_docs(docs): 
-    # Update the metadata of documents based on the source file path
     department_list = ['engineering', 'finance', 'hr', 'marketing']
+    all_access_departments = department_list + ['c_level']
     updated_docs = []
     for doc in docs:
         source = doc.metadata.get('source', '')
@@ -47,11 +47,11 @@ def update_metadata_into_docs(docs):
         if match:
             dept = match.group(1)
             if dept == 'general':
-                # For general documents, give access to all departments
-                doc.metadata['department'] = department_list
+                # For general documents, give access to all departments and c_level
+                doc.metadata['department'] = all_access_departments
             else:
-                # For specific department documents
-                doc.metadata['department'] = dept
+                # For specific department documents, add c_level as well
+                doc.metadata['department'] = [dept, 'c_level']
             updated_docs.append(doc)
     updated_docs
     return updated_docs
@@ -192,6 +192,11 @@ dept_configs = {
         "icon": "🏢",
         "name": "General Support",
         "greeting": "Hi! I'm your General Assistant. I can help with various inquiries and support."
+    },
+    "c_level": {
+        "icon": "🏢",
+        "name": "C Level",
+        "greeting": "Hi! I'm your Manger Assistant. I can help with various inquiries and support."
     }
 }
 
