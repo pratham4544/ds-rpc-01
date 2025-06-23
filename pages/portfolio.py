@@ -554,41 +554,101 @@ def create_contact_section(data):
 def create_favourite_projects_section():
     """Creates a section to showcase personal favourite projects with links."""
     st.markdown("## 🌟 My Favourite Projects")
+    st.markdown("Here are some of my most exciting and innovative projects that showcase my expertise in AI, NLP, and web development:")
 
     # List your favourite projects here
     favourite_projects = [
         {
-            "name": "ChatBot Pro",
-            "description": "A role-based internal chatbot for organizations, built with Streamlit and FastAPI.",
-            "github_url": "https://github.com/pratham4544/ds-rpc-01",
-            "demo_url": "https://your-deployment-url-here"  # Replace with your live demo URL
+            "name": "Chat with Indian Freedom Fighters 🇮🇳",
+            "description": "An educational AI application that brings Indian freedom fighters to life through interactive conversations. Users can chat with historical figures and learn about India's independence struggle in an engaging way.",
+            "technologies": ["Python", "Streamlit", "Historical AI", "Educational Tech"],
+            "demo_url": "https://chat-with-indian-freedom-fighters.streamlit.app/",
+            "features": ["Historical figure simulation", "Educational content", "Interactive learning"]
         },
         {
-            "name": "Awesome Portfolio",
-            "description": "A modern, interactive developer portfolio template using Streamlit.",
-            "github_url": "https://github.com/pratham4544/awesome-portfolio",
-            "demo_url": "https://portfolio-demo-url-here"  # Replace with your live demo URL
+            "name": "Chat with Gita 🕉️",
+            "description": "An interactive AI-powered chatbot that allows users to have meaningful conversations with the wisdom of the Bhagavad Gita. Built using advanced NLP techniques and Streamlit for an intuitive user experience.",
+            "technologies": ["Python", "Streamlit", "NLP", "AI", "RAG"],
+            "demo_url": "https://chat-with-gita.streamlit.app/",
+            "features": ["Interactive chat interface", "Contextual responses", "Ancient wisdom accessibility"]
         },
-        # Add more favourite projects as needed
+        {
+            "name": "Bulk Email Sender 📧",
+            "description": "A powerful bulk email automation tool with advanced features like personalization, scheduling, and analytics. Perfect for marketing campaigns and newsletter distribution with a user-friendly interface.",
+            "technologies": ["Python", "Streamlit", "SMTP", "Email APIs", "Automation"],
+            "demo_url": "https://bulk-email-sender.streamlit.app/",
+            "features": ["Bulk email sending", "Template customization", "Analytics dashboard"]
+        },
+        {
+            "name": "RAG Evaluator 🔍",
+            "description": "A comprehensive evaluation framework for Retrieval-Augmented Generation (RAG) systems. This tool helps assess the performance, accuracy, and effectiveness of RAG implementations with detailed metrics and analysis.",
+            "technologies": ["Python", "Streamlit", "RAG", "ML Evaluation", "NLP"],
+            "demo_url": "https://rag-evaluator.streamlit.app/",
+            "features": ["Performance metrics", "Accuracy assessment", "Comparative analysis"]
+        },
+        {
+            "name": "LLM Summarization Tool 📝",
+            "description": "An advanced text summarization application powered by Large Language Models. Capable of processing long documents and generating concise, accurate summaries while preserving key information and context.",
+            "technologies": ["Python", "Streamlit", "LLM", "Text Processing", "AI"],
+            "demo_url": "https://summarization-llm-0.streamlit.app/",
+            "features": ["Multi-document summarization", "Customizable length", "Context preservation"]
+        }
     ]
 
-    for project in favourite_projects:
-        st.markdown(f"""
-        <div class="project-card">
-            <h3 style="color: #2c3e50; margin-bottom: 0.75rem;">{project['name']}</h3>
-            <p style="color: #666; margin-bottom: 1rem; line-height: 1.6; font-size: 0.95rem;">
-                {project['description']}
-            </p>
-            <div>
-                <a href="{project['github_url']}" class="custom-button" target="_blank" style="margin-right: 0.5rem;">
-                    🔗 View Code
-                </a>
-                <a href="{project['demo_url']}" class="custom-button" target="_blank">
-                    🚀 Live Demo
-                </a>
+    # Create project cards in a grid layout
+    for i, project in enumerate(favourite_projects):
+        # Create alternating layout for visual appeal
+        if i % 2 == 0:
+            col1, col2 = st.columns([2, 1])
+            main_col, side_col = col1, col2
+        else:
+            col1, col2 = st.columns([1, 2])
+            main_col, side_col = col2, col1
+        
+        with main_col:
+            # Technology tags
+            tech_tags = "".join([f'<span class="tech-tag">{tech}</span>' for tech in project['technologies']])
+            
+            st.markdown(f"""
+            <div class="project-card">
+                <h3 style="color: #2c3e50; margin-bottom: 0.75rem;">
+                    {project['name']}
+                    <span style="color: #667eea; font-size: 0.7rem; margin-left: 0.5rem;">✨ FEATURED</span>
+                </h3>
+                <p style="color: #666; margin-bottom: 1rem; line-height: 1.6; font-size: 0.95rem;">
+                    {project['description']}
+                </p>
+                <div style="margin-bottom: 1rem;">
+                    {tech_tags}
+                </div>
+                <div style="margin-bottom: 1rem;">
+                    <a href="{project['demo_url']}" class="custom-button" target="_blank" style="margin-right: 0.5rem;">
+                        🚀 Try Live Demo
+                    </a>
+                </div>
             </div>
-        </div>
-        """, unsafe_allow_html=True)
+            """, unsafe_allow_html=True)
+        
+        with side_col:
+            st.markdown("#### Key Features:")
+            for feature in project['features']:
+                st.markdown(f"• {feature}")
+            st.markdown("---")
+
+    # Add a call-to-action section
+    st.markdown("---")
+    st.markdown("""
+    <div style="text-align: center; padding: 2rem; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 15px; color: white; margin-top: 2rem;">
+        <h3 style="color: white; margin-bottom: 1rem;">🚀 Interested in collaborating?</h3>
+        <p style="font-size: 1.1rem; margin-bottom: 1.5rem; opacity: 0.9;">
+            I'm always excited to work on innovative projects and explore new technologies. 
+            Let's build something amazing together!
+        </p>
+        <a href="mailto:prathameshshete609@gmail.com" style="background: rgba(255,255,255,0.2); color: white; padding: 0.8rem 2rem; border-radius: 25px; text-decoration: none; font-weight: bold; border: 2px solid rgba(255,255,255,0.3);">
+            📧 Let's Connect
+        </a>
+    </div>
+    """, unsafe_allow_html=True)
 
 # --- Main Application Logic ---
 def main():
