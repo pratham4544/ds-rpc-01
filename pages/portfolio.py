@@ -587,7 +587,7 @@ def create_favourite_projects_section():
             "features": ["Performance metrics", "Accuracy assessment", "Comparative analysis"]
         },
         {
-            "name": "LLM Summarization Tool 📝",
+            "name": "Multi-LLM Summarization Tool 📝",
             "description": "An advanced text summarization application powered by Large Language Models. Capable of processing long documents and generating concise, accurate summaries while preserving key information and context.",
             "technologies": ["Python", "Streamlit", "LLM", "Text Processing", "AI"],
             "demo_url": "https://summarization-llm-0.streamlit.app/",
